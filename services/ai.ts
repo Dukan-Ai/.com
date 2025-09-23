@@ -2,9 +2,21 @@
 import { GoogleGenAI } from "@google/genai";
 import { Product, Insight } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// Gracefully handle the case where the API key is not available in the environment.
+let ai: GoogleGenAI | null = null;
+try {
+  ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+} catch (e) {
+  console.error("Could not initialize GoogleGenAI. This is expected if API_KEY is not set in the environment.", e);
+  // ai remains null, and the app will show a graceful error instead of crashing.
+}
 
 export async function* generateDynamicInsights(products: Product[], language: string): AsyncGenerator<Insight> {
+  if (!ai) {
+    yield { icon: 'error', title: 'AI Service Unavailable', description: 'Could not connect to the AI service. The API key may not be configured for this deployment.' };
+    return;
+  }
+  
   if (!products || products.length === 0) {
     yield { icon: 'add_shopping_cart', title: 'Add Your First Product', description: 'Add products to your catalog to start getting AI insights.' };
     return;
