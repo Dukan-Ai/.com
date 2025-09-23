@@ -121,7 +121,6 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({ orders, onModalStateC
             <Card>
               <p className="text-sm font-medium text-neutral-400">{t('dashboard_sales')}</p>
               <p className="text-2xl font-bold text-white">₹{metrics.thisMonth.sales.toLocaleString('en-IN')}</p>
-            {/* FIX: The closing tag for Card was incorrectly lowercase 'card'. It has been corrected to 'Card' to match the component name. */}
             </Card>
             <Card>
               <p className="text-sm font-medium text-neutral-400">{t('dashboard_orders')}</p>
